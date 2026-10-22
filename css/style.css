@@ -1,0 +1,9 @@
+body { font-family: Arial, sans-serif; margin: 20px; background: #f4f6fa; }
+table { border-collapse: collapse; width: 100%; background: #fff; }
+th, td { border: 1px solid #ccc; padding: 6px; text-align: left; }
+th { background: #dce6f7; }
+input, select, button { padding: 6px; margin: 3px 3px 3px 0; }
+.hijau { color: green; }
+.oranye { color: orange; }
+.merah { color: red; }
+.error { color: red; }
