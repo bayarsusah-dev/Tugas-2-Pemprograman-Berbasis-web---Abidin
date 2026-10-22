@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Tracking DO</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+  <h1>Tracking Delivery Order</h1>
+  <a href="index.html">Beranda</a> | <a href="stok.html">Stok Bahan Ajar</a>
+
+  <h2>Cari DO</h2>
+  <input v-model="cariDO" placeholder="Contoh: DO2025-001">
+
+  <div v-if="hasil">
+    <p><b>Status: {{ hasil.status }}</b><br>
+      {{ hasil.nama }} ({{ hasil.nim }}) | {{ hasil.ekspedisi }} | Kirim: {{ hasil.tanggalKirim }}<br>
+      Paket: {{ hasil.paket }} | Total: Rp {{ hasil.total.toLocaleString('id-ID') }}</p>
+    <ul>
+      <li v-for="p in hasil.perjalanan">{{ p.waktu }} - {{ p.keterangan }}</li>
+    </ul>
+  </div>
+  <p v-else-if="cariDO" class="error">Nomor DO tidak ditemukan</p>
+
+  <h2>Daftar DO</h2>
+  <ul>
+    <li v-for="(d, nomor) in tracking">{{ nomor }} - {{ d.nama }} ({{ d.status }})</li>
+  </ul>
+
+  <h2>Tambah DO Baru</h2>
+  <p class="hijau" v-if="sukses">{{ sukses }}</p>
+  Nomor DO: <b>{{ nomorDO }}</b><br>
+  <input v-model="form.nim" placeholder="NIM (angka)">
+  <input v-model="form.nama" placeholder="Nama">
+  <select v-model="form.ekspedisi">
+    <option value="">Pilih ekspedisi</option>
+    <option v-for="e in pengirimanList" :value="e.nama">{{ e.nama }}</option>
+  </select>
+  <select v-model="form.kodePaket">
+    <option value="">Pilih paket</option>
+    <option v-for="p in paket" :value="p.kode">{{ p.kode }} - {{ p.nama }}</option>
+  </select>
+  <input type="date" v-model="form.tanggalKirim">
+
+  <div v-if="paketDipilih">
+    Isi paket:
+    <ul><li v-for="k in paketDipilih.isi">{{ k }}</li></ul>
+  </div>
+
+  <p>Total harga: <b>Rp {{ total.toLocaleString('id-ID') }}</b></p>
+  <button @click="simpan">Simpan DO</button>
+  <p class="error" v-if="pesan">{{ pesan }}</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.min.js"></script>
+<script src="js/tracking-app.js"></script>
+</body>
+</html>

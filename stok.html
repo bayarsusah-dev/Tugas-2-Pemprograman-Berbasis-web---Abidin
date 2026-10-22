@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Stok Bahan Ajar</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+  <h1>Stok Bahan Ajar</h1>
+  <a href="index.html">Beranda</a> | <a href="tracking.html">Tracking DO</a>
+
+  <h2>Filter</h2>
+  <select v-model="upbjj">
+    <option value="">Semua UT-Daerah</option>
+    <option v-for="u in upbjjList" :value="u">{{ u }}</option>
+  </select>
+
+  <!-- dependent option: baru muncul kalau UT-Daerah sudah dipilih -->
+  <select v-model="kategori" v-if="upbjj">
+    <option value="">Semua Kategori</option>
+    <option v-for="k in kategoriList" :value="k">{{ k }}</option>
+  </select>
+
+  <select v-model="urut">
+    <option value="judul">Urut: Judul</option>
+    <option value="qty">Urut: Stok</option>
+    <option value="harga">Urut: Harga</option>
+  </select>
+
+  <label><input type="checkbox" v-model="reorder"> Perlu re-order</label>
+  <button @click="reset">Reset</button>
+
+  <h2>Daftar Stok ({{ stokTampil.length }} data)</h2>
+  <table>
+    <tr>
+      <th>Kode / Judul</th><th>Kategori</th><th>UT-Daerah</th><th>Rak</th>
+      <th>Stok</th><th>Safety</th><th>Status</th><th>Catatan</th><th>Aksi</th>
+    </tr>
+    <tr v-for="s in stokTampil" :key="s.kode">
+      <td>{{ s.kode }} - {{ s.judul }}</td>
+      <td>{{ s.kategori }}</td>
+      <td>{{ s.upbjj }}</td>
+      <td>{{ s.lokasiRak }}</td>
+      <td>{{ s.qty }}</td>
+      <td>{{ s.safety }}</td>
+      <td>
+        <span v-if="status(s) === 'aman'" class="hijau">✅ Aman</span>
+        <span v-else-if="status(s) === 'menipis'" class="oranye">⚠️ Menipis</span>
+        <span v-else class="merah">❌ Kosong</span>
+      </td>
+      <td v-html="s.catatanHTML"></td>
+      <td><button @click="edit(s)">Edit</button></td>
+    </tr>
+  </table>
+
+  <h2>{{ editKode ? 'Edit Bahan Ajar ' + editKode : 'Tambah Bahan Ajar' }}</h2>
+  <input v-model="form.kode" placeholder="Kode" :disabled="editKode !== ''">
+  <input v-model="form.judul" placeholder="Judul">
+  <select v-model="form.kategori">
+    <option value="">Kategori</option>
+    <option v-for="k in kategoriList" :value="k">{{ k }}</option>
+  </select>
+  <select v-model="form.upbjj">
+    <option value="">UT-Daerah</option>
+    <option v-for="u in upbjjList" :value="u">{{ u }}</option>
+  </select>
+  <input v-model="form.lokasiRak" placeholder="Lokasi rak">
+  <input v-model.number="form.harga" type="number" placeholder="Harga">
+  <input v-model.number="form.qty" type="number" placeholder="Stok">
+  <input v-model.number="form.safety" type="number" placeholder="Safety">
+  <input v-model="form.catatanHTML" placeholder="Catatan">
+  <br>
+  <button @click="simpan">Simpan</button>
+  <button @click="batal">Batal</button>
+  <p class="error" v-if="pesan">{{ pesan }}</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.min.js"></script>
+<script src="js/stok-app.js"></script>
+</body>
+</html>
